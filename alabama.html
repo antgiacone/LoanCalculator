@@ -1,0 +1,357 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="css/kick-style.css">
+	<link rel="stylesheet" href="css/jq.ui.css">
+  	<script src="js/jq-library.js"></script>
+  	<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  	<script src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.11/jquery.mousewheel.min.js"></script>
+  	<script src="js/jquery-ui-slider-pips.js"></script>
+  	<link rel="stylesheet" type="text/css" href="css/jquery-ui-slider-pips.css">
+  	<script type="text/javascript" src="js/vert-slider.js"></script>
+	</head>
+	<body>
+		<div class="kick-cal">
+			<div class="kick-title">
+				<img src="images/mobile-logo.jpg">
+				<h2>Loan Calculator</h2>
+			</div>
+<fieldset class="gmiUploadFieldset">
+        <legend>Upload Proof of Income</legend>
+        <div class="applicationAccordion applicationAccordionActive noTopMargin">
+            <h4 class="noTopMargin">Upload Proof of Income</h4>
+        </div>
+        <p>Please select one of the following:</p>
+        <p>
+          <input type="RadioButton" id="uploadNow" value="Upload Document(s) Now"/>- To speed up the validation of your income use the button below to upload your most recent
+            <a href="#" id="uploadPayStubMark">pay stub</a> or other supporting income statement. A current <a href="#" id="uploadBankStatementMark">bank statement</a> will be required to be supplied with any pay stub
+            or other supporting income statement.
+        </p>
+        <div class="toolTipSmall" id="uploadPayStubTip">
+            <div class="toolTip">i</div> <span>Your Pay Stub must be within 30 days of this application.</span>
+        </div>
+        <div class="toolTipSmall" id="uploadBankStatementTip">
+            <div class="toolTip">i</div> <span>Your Bank Statement must be within 30 days of this application.</span>
+        </div>
+        
+
+        <div id="uploadDropDownList">
+            Label for something
+            <a class="toolTip" id="uploadToolMark">i</a>
+            <div id="uploadToolTip">
+                <a id="closeTip" class="closeTip">X</a>
+                <div class="toolTip">i</div> <span>The document(s) should be a JPG, PDF, PNG, TIFF type and less than 500KB in size.</span>
+            </div>
+            <!--First Upload Dropdown-->
+            <div class="gmi_select">
+                <input type="file" name="DocData" id="DocData" style="display:none">
+                <!--Income Type Dropdown-->
+                <div class="styled-select">
+                    <div class="styled-select-wrap">
+                      <select class="docBrowse">
+                        <option>1</option>
+                        <option>2</option>
+                      </select>
+                    </div>
+                </div>                
+                <input id="DocInput" class="docBrowse" type="text" onclick="$('#DocData').click();" placeholder="Choose File">
+                <button class="transBtn btn btn-small docBrowse">Upload File</button>
+                <div class="checkmarkContents">
+                    <div class="checkmark-circle" id="check1">
+                        <div class="checkmark-background"></div>
+                        <div class="checkmark draw"></div>
+                    </div>
+                </div>                
+                <div class="checkmark-circle top hideInMobile" id="x1">
+                    <div class="x-checkmark-background"></div>
+                    <div class="x-checkmark draw"></div>
+                </div>
+            </div>
+
+            <p id="uploadFailureMessage" class="field-validation-error hideInMobile"></p>
+        </div>
+        <div class="gmi_upload_wrap_right">
+            <div class="gmiInput">
+                <div>
+                    <ul class="gmi_upload_ul">
+                        @for (int i = 0; i < UploadedSofar.Count; i++)
+                        {
+                            <li>@UploadedSofar[i]</li>
+                    
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p>
+          <input type="radiobutton" id="uploadLater">
+- I prefer to upload my proof of income at a later time. This 
+            information can be faxed to 1-877-518-1612 or email <a href="mailto:verify@service.advanceamerica.net ">Customer Service</a>.
+        </p>
+        <div class="uploadLaterPopUp">
+            <div>
+                <a class="popup_close" title="Close" id="uploadLaterClose">X</a>
+                <img src="~/Images/errorIcon.png" />
+                <p>
+                    By skipping this page you will still need to supply proof of income before we can fund your loan. Supporting documentation can be emailed to
+                    <a href="mailto:verify@service.advanceamerica.net ">Customer Service</a> or by fax to <b>1-877-518-1612</b>.
+                </p>
+                <p>
+                    If you provide supporting documentation on a later date, you will be required to resign your loan agreement and applicable disclosures.
+                </p>
+            </div>            
+        </div>
+        <p>Please note, our loan review can not be finalized until this information is received.</p> 
+    </fieldset>
+		</div>
+		<div class="interest-tooltip-box">
+			<h4>Written By: Anthony Giacone</h4>
+		</div>
+		<script type = "text/javascript">
+function valFunction() {
+if (document.kickForm.states.selectedIndex == 1) {
+
+	//Alabama Values
+$("#slider2").slider({ max: 500 , min: 200 , step: 100 ,
+      slide: function( event, ui ) {
+        //Multiply the Value times 100,000th so that you always get 2 decimal places.
+        var loanAmount = ui.value * 100
+        $( ".amount" ).val((( loanAmount )/100 ).toFixed(2));
+        $( ".charge-amount" ).val((17.5*(loanAmount/100)/100).toFixed(2));
+        $(".total-amount").val(((17.5*( loanAmount /100))/100 + ui.value).toFixed(2));
+      }});
+$("#slider2").slider("pips" , {
+    rest: "label"
+});
+// first we need a slider to work with
+var $slider3 = $("#slider2").slider({ max: 500 , min: 200 , step: 100 , value: 200 });
+
+// and then we can apply a float to it!
+$slider3.slider("float");
+//Code for Days Slider
+//var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var financeCharge = 35
+var loanAmount = 200
+$("#slider6").slider({ max: 31, min: 10, value: 15, step: 10,
+  slide: function (event, ui) {
+    $(".days-value").val((Math.floor((financeCharge / loanAmount) * 100 * (365 / ui.value) * 100) / 100).toFixed(2));
+  }
+ });
+$("#slider6").slider("pips");
+var $slider4 = $("#slider6").slider({ max: 31 , min: 10 , step: 1 , value: 15 });
+
+// and then we can apply a float to it!
+$slider4.slider("float");
+return false;
+}
+
+//California Values
+if (document.kickForm.states.selectedIndex == 2) {
+$("#slider2").slider({ max: 255 , min: 85 , step: 85 ,
+      slide: function( event, ui ) {
+        //Multiply the Value times 100,000th so that you always get 2 decimal places.
+        var loanAmount = ui.value * 100
+        $( ".amount" ).val((( loanAmount )/100 ).toFixed(2));
+        $( ".charge-amount" ).val(Math.floor(17.65*(loanAmount/100)/100).toFixed(2));
+        $(".total-amount").val((Math.floor(17.65*( loanAmount /100))/100 + ui.value).toFixed(2));
+      }});
+$("#slider2").slider("pips" , {
+    rest: "label"
+});
+
+var $slider3 = $("#slider2").slider({ max: 255 , min: 85 , step: 85 , value: 170 });
+
+
+$slider3.slider("float");
+//Code for Days Slider
+//var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var financeCharge = 15
+var loanAmount = 85
+$("#slider6").slider({ max: 31, min: 7, value: 10, step: 10,
+  slide: function (event, ui) {
+    $(".days-value").val((Math.floor((financeCharge / loanAmount) * 100 * (365 / ui.value) * 100) / 100).toFixed(2));
+  }
+ });
+$("#slider6").slider("pips");
+var $slider4 = $("#slider6").slider({ max: 31 , min: 7 , step: 1 , value: 10 });
+$slider4.slider("float");
+return false;
+}
+
+//Florida Values
+if (document.kickForm.states.selectedIndex == 3) {
+$("#slider2").slider({ max: 255 , min: 85 , step: 85 ,
+      slide: function( event, ui ) {
+        //Multiply the Value times 100,000th so that you always get 2 decimal places.
+        var loanAmount = ui.value * 100
+        $( ".amount" ).val((( loanAmount )/100 ).toFixed(2));
+        $( ".charge-amount" ).val(Math.floor(17.65*(loanAmount/100)/100).toFixed(2));
+        $(".total-amount").val((Math.floor(17.65*( loanAmount /100))/100 + ui.value).toFixed(2));
+      }});
+$("#slider2").slider("pips" , {
+    rest: "label"
+});
+var $slider3 = $("#slider2").slider({ max: 255 , min: 85 , step: 85 , value: 170 });
+
+
+$slider3.slider("float");
+//Code for Days Slider
+//var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var financeCharge = 15
+var loanAmount = 85
+$("#slider6").slider({ max: 31, min: 7, value: 10, step: 10,
+  slide: function (event, ui) {
+    $(".days-value").val((Math.floor((financeCharge / loanAmount) * 100 * (365 / ui.value) * 100) / 100).toFixed(2));
+  }
+ });
+$("#slider6").slider("pips");
+var $slider4 = $("#slider6").slider({ max: 31 , min: 7 , step: 1 , value: 10 });
+
+$slider4.slider("float");
+return false;
+}
+
+//Kansas Values
+if (document.kickForm.states.selectedIndex == 4) {
+$("#slider2").slider({ max: 500 , min: 200 , step: 100 ,
+      slide: function( event, ui ) {
+        //Multiply the Value times 100,000th so that you always get 2 decimal places.
+        var loanAmount = ui.value * 100
+        $( ".amount" ).val( ((loanAmount )/100 ).toFixed(2));
+        $( ".charge-amount" ).val((15*(loanAmount/100)/100).toFixed(2));
+        $(".total-amount").val(((15*( loanAmount /100))/100 + ui.value).toFixed(2));
+      }});
+$("#slider2").slider("pips" , {
+    rest: "label"
+});
+// Here I set the values of the slider...
+var $slider3 = $("#slider2").slider({ max: 500 , min: 200 , step: 100 , value: 300 });
+
+// and then we can apply a float to it!
+$slider3.slider("float");
+//Code for Days Slider
+//var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var financeCharge = 30
+var loanAmount = 200
+$("#slider6").slider({ max: 30, min: 7, value: 10,
+  slide: function (event, ui) {
+    $(".days-value").val((Math.floor((financeCharge / loanAmount) * 100 * (365 / ui.value) * 100) / 100).toFixed(2));
+  }
+ });
+$("#slider6").slider("pips");
+var $slider4 = $("#slider6").slider({ max: 30 , min: 7 , step: 1 , value: 10 });
+
+$slider4.slider("float");
+return false;
+}
+
+//Louisiana Values
+if (document.kickForm.states.selectedIndex == 5) {
+    $("#slider2").slider({ max: 500 , min: 200 , step: 100 ,
+          slide: function( event, ui ) {
+            //Multiply the Value times 100,000th so that you always get 2 decimal places.
+            var p = ui.value * 100.00001
+            $( ".amount" ).val( ( p )/100 );
+            $( ".charge-amount" ).val(( p * .175)/100);
+            $(".total-amount").val(( p * 1.175)/100);
+          }});
+    $("#slider2").slider("pips" , {
+        rest: "label"
+    });
+    
+    var $slider3 = $("#slider2").slider({ max: 500 , min: 200 , step: 100 , value: 300 });
+
+    // and then we can apply a float to it!
+    $slider3.slider("float");
+    //Code for Days Slider
+    //var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var financeCharge = 30
+    var loanAmount = 200
+    $("#slider6").slider({ max: 30, min: 7, value: 10,
+      slide: function (event, ui) {
+        $(".days-value").val(Math.floor(((365/(ui.value)) * (financeCharge/loanAmount)) * 10000 ) / 100);
+      }
+     });
+    $("#slider6").slider("pips");
+    var $slider4 = $("#slider6").slider({ max: 30 , min: 7 , step: 1 , value: 10 });
+
+    // and then we can apply a float to it!
+    $slider4.slider("float");
+return false;
+}
+
+//Michigan Values
+if (document.kickForm.states.selectedIndex == 6) {
+$("#slider2").slider({ max: 255 , min: 85 , step: 85 ,
+      slide: function( event, ui ) {
+        //Multiply the Value times 100,000th so that you always get 2 decimal places.
+        var loanAmount = ui.value * 100
+        $( ".amount" ).val((( loanAmount )/100 ).toFixed(2));
+        $( ".charge-amount" ).val(Math.floor(17.65*(loanAmount/100)/100).toFixed(2));
+        $(".total-amount").val((Math.floor(17.65*( loanAmount /100))/100 + ui.value).toFixed(2));
+      }});
+$("#slider2").slider("pips" , {
+    rest: "label"
+});
+
+var $slider3 = $("#slider2").slider({ max: 255 , min: 85 , step: 85 , value: 170 });
+
+// and then we can apply a float to it!
+$slider3.slider("float");
+//Code for Days Slider
+//var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var financeCharge = 15
+var loanAmount = 85
+$("#slider6").slider({ max: 31, min: 7, value: 10, step: 10,
+  slide: function (event, ui) {
+    $(".days-value").val((Math.floor((financeCharge / loanAmount) * 100 * (365 / ui.value) * 100) / 100).toFixed(2));
+  }
+ });
+$("#slider6").slider("pips");
+var $slider4 = $("#slider6").slider({ max: 31 , min: 7 , step: 1 , value: 10 });
+
+$slider4.slider("float");
+return false;
+}
+
+//Texas Values
+if (document.kickForm.states.selectedIndex == 7) {
+$("#slider2").slider({ max: 500 , min: 200 , step: 100 ,
+      slide: function( event, ui ) {
+        //Multiply the Value times 100,000th so that you always get 2 decimal places.
+        var loanAmount = ui.value * 100
+        $( ".amount" ).val((( loanAmount )/100 ).toFixed(2));
+        $( ".charge-amount" ).val((17.5*(loanAmount/100)/100).toFixed(2));
+        $(".total-amount").val(((17.5*( loanAmount /100))/100 + ui.value).toFixed(2));
+      }});
+$("#slider2").slider("pips" , {
+    rest: "label"
+});
+// first we need a slider to work with
+var $slider3 = $("#slider2").slider({ max: 500 , min: 200 , step: 100 , value: 200 });
+
+$slider3.slider("float");
+//Code for Days Slider
+//var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var financeCharge = 35
+var loanAmount = 200
+$("#slider6").slider({ max: 31, min: 10, value: 15, step: 1,
+  slide: function (event, ui) {
+    $(".days-value").val((Math.floor((financeCharge / loanAmount) * 100 * (365 / ui.value) * 100) / 100).toFixed(2));
+  }
+ });
+$("#slider6").slider("pips");
+var $slider4 = $("#slider6").slider({ max: 31 , min: 10 , step: 1 , value: 15 });
+
+$slider4.slider("float");
+return false;
+}
+}
+
+</script>
+	</body>
+</html>
